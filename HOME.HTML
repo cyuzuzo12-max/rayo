@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUKURE PIGGERY · Login</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #81c784;
+            --accent-color: #ff9800;
+            --dark-color: #1b5e20;
+            --light-color: #e8f5e9;
+            --danger-color: #f44336;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --info-color: #2196f3;
+            --text-dark: #263238;
+            --text-light: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== LOGIN PAGE SPECIFIC STYLES ===== */
+        #login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f0e9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #login-page::before {
+            content: "🐷";
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.03;
+            bottom: -30px;
+            right: -30px;
+            transform: rotate(10deg);
+        }
+
+        #login-page::after {
+            content: "🌾";
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.03;
+            top: -20px;
+            left: -20px;
+            transform: rotate(-15deg);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 60, 30, 0.25);
+            border: 1px solid rgba(46, 125, 50, 0.15);
+            position: relative;
+            z-index: 10;
+            animation: floatIn 0.6s ease;
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header .logo-icon {
+            font-size: 3.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 8px 12px rgba(46,125,50,0.2));
+        }
+
+        .login-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-header p {
+            color: #5f7d6b;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            color: #1d3b2a;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+
+        .login-form .input-group {
+            display: flex;
+            align-items: center;
+            background: #f9fdfa;
+            border: 1.5px solid #d0e0d5;
+            border-radius: 18px;
+            padding: 0.1rem 0.1rem 0.1rem 1rem;
+            transition: all 0.25s;
+        }
+
+        .login-form .input-group:hover,
+        .login-form .input-group:focus-within {
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(46,125,50,0.08);
+        }
+
+        .login-form .input-group i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-right: 0.6rem;
+            opacity: 0.8;
+        }
+
+        .login-form .form-control {
+            width: 100%;
+            padding: 0.9rem 0.9rem 0.9rem 0.2rem;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .login-form .form-control:focus {
+            outline: none;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            font-size: 0.85rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2d4f3a;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: var(--primary-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dashed transparent;
+            transition: 0.2s;
+        }
+
+        .forgot-password:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(105deg, var(--primary-color), var(--dark-color));
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 18px rgba(27,94,32,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(105deg, #236b27, #124c16);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(27,94,32,0.3);
+        }
+
+        .btn-login i {
+            font-size: 1.2rem;
+        }
+
+        .register-prompt {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #d2e2d6;
+            color: #3a5a47;
+            font-size: 0.95rem;
+        }
+
+        .register-prompt a {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 5px;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .register-prompt a:hover {
+            border-bottom-color: var(--accent-color);
+        }
+
+        .login-footer-text {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
+            color: #6a8a76;
+        }
+
+        /* credentials hint – subtle */
+        .demo-credentials {
+            background: #edf7ed;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            margin-top: 1.8rem;
+            font-size: 0.8rem;
+            color: #1d4925;
+            border: 1px solid #c8e0cb;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+
+        .demo-credentials span {
+            background: white;
+            padding: 0.25rem 0.9rem;
+            border-radius: 60px;
+            border: 1px solid #b1cfb4;
+            font-weight: 500;
+        }
+
+        /* ===== MAIN SYSTEM (HIDDEN BY DEFAULT, SHOWN AFTER LOGIN) ===== */
+        #main-system {
+            display: none;
+        }
+
+        #main-system.authenticated {
+            display: block;
+        }
+
+        /* all your existing styles remain exactly as they were – preserved */
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-links a.active {
+            background: var(--accent-color);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .user-menu i {
+            font-size: 1.2rem;
+        }
+
+        .user-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            min-width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            z-index: 1;
+        }
+
+        .user-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark);
+            padding: 12px 16px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            background: var(--light-color);
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .page-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: var(--light-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        .badge-warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge-danger {
+            background: #ffcdd2;
+            color: #b71c1c;
+        }
+
+        .badge-info {
+            background: #b3e5fc;
+            color: #01579b;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(46,125,50,0.1);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .stat-info h4 {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stat-info h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Progress Bar */
+        .progress {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 1000;
+        }
+
+        .chat-widget.active {
+            display: block;
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            text-align: center;
+            color: #666;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        canvas {
+            max-height: 300px;
+            width: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            [style*="grid-template-columns: 300px 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            .modal-content {
+                width: 95%;
+            }
+            .login-container {
+                margin: 1rem;
+                padding: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN PAGE (VISIBLE FIRST) ===== -->
+    <div id="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-piggy-bank logo-icon"></i>
+                <h1>BUKURE PIGGERY</h1>
+                <p>Complete Pig Trading System</p>
+            </div>
+
+            <div class="login-form">
+                <div class="form-group">
+                    <label><i class="fas fa-user" style="margin-right: 5px;"></i> Username or Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" class="form-control" id="login-username" placeholder="farmer@bukure.com" value="john@bukure.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock" style="margin-right: 5px;"></i> Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-key"></i>
+                        <input type="password" class="form-control" id="login-password" placeholder="••••••••" value="demo123">
+                    </div>
+                </div>
+
+                <div class="login-options">
+                    <label class="remember-me">
+                        <input type="checkbox" checked> Remember me
+                    </label>
+                    <a href="#" class="forgot-password" onclick="forgotPasswordAlert()">Forgot password?</a>
+                </div>
+
+                <button type="button" class="btn-login" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Sign in to Dashboard
+                </button>
+
+                <!-- demo credentials hint (subtle, user-friendly) -->
+                <div class="demo-credentials">
+                    <span><i class="fas fa-flask"></i> Demo:</span>
+                    <span>john@bukure.com</span>
+                    <span>demo123</span>
+                </div>
+
+                <div class="register-prompt">
+                    Don't have an account?
+                    <a href="#" onclick="registerAlert()">Register now</a>
+                </div>
+                <div class="login-footer-text">
+                    <i class="fas fa-shield-alt"></i> Secure SSL encrypted
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN SYSTEM – HIDDEN UNTIL LOGIN ===== -->
+    <div id="main-system">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-piggy-bank"></i>
+                <h1>BUKURE PIGGERY</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('dashboard')" class="active">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#" onclick="showPage('trading')">
+                    <i class="fas fa-chart-line"></i> Trading
+                </a>
+                <a href="#" onclick="showPage('marketplace')">
+                    <i class="fas fa-store"></i> Marketplace
+                </a>
+                <a href="#" onclick="showPage('inventory')">
+                    <i class="fas fa-box"></i> Inventory
+                </a>
+                <a href="#" onclick="showPage('student')">
+                    <i class="fas fa-graduation-cap"></i> Student
+                </a>
+                <a href="#" onclick="showPage('admin')">
+                    <i class="fas fa-cog"></i> Admin
+                </a>
+                <a href="#" onclick="showPage('reports')">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </a>
+                <a href="#" onclick="showPage('messages')">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+            </div>
+            <div class="user-menu">
+                <div class="user-dropdown">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="logged-in-user">John Doe</span>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="showPage('profile')"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="showPage('notifications')"><i class="fas fa-bell"></i> Notifications</a>
+                        <hr>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- DASHBOARD PAGE -->
+            <div id="dashboard-page" class="page active-page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-home"></i>
+                        Dashboard Overview
+                    </h2>
+                    <div>
+                        <span class="badge badge-success">System Online</span>
+                        <span id="current-date" class="badge badge-info"></span>
+                    </div>
+                </div>
+
+                <!-- Key Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Pigs</h4>
+                            <h2 id="total-pigs">567</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Today's Revenue</h4>
+                            <h2 id="today-revenue">$2,450</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Active Users</h4>
+                            <h2 id="active-users">198</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Pending Orders</h4>
+                            <h2 id="pending-orders">12</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Price Trends</h3>
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                    <div class="card">
+                        <h3>Breed Distribution</h3>
+                        <canvas id="breedChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="table-container">
+                    <h3>Recent Activities</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Activity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-activities">
+                            <tr>
+                                <td>10:30 AM</td>
+                                <td>John Doe</td>
+                                <td>Purchased Pig #P045</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>10:15 AM</td>
+                                <td>Mary Smith</td>
+                                <td>Listed 3 pigs for sale</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TRADING PAGE -->
+            <div id="trading-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Live Trading Platform
+                    </h2>
+                    <div>
+                        <span class="badge badge-success">Market Open</span>
+                        <button class="btn btn-primary" onclick="placeOrder()">
+                            <i class="fas fa-plus"></i> Place Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Price Ticker -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Current Price/kg</h4>
+                            <h2 id="current-price">$2.50</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-trend-up"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>24h Change</h4>
+                            <h2 style="color: var(--success-color);">+5.2%</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-simple"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Volume (24h)</h4>
+                            <h2>145 pigs</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trading Interface -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Buy Orders</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="buy-orders">
+                                    <tr>
+                                        <td>$2.55</td>
+                                        <td>10</td>
+                                        <td>$25.50</td>
+                                        <td><button class="btn btn-success" onclick="executeTrade('buy')">Sell</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>$2.50</td>
+                                        <td>15</td>
+                                        <td>$37.50</td>
+                                        <td><button class="btn btn-success" onclick="executeTrade('buy')">Sell</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Sell Orders</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sell-orders">
+                                    <tr>
+                                        <td>$2.60</td>
+                                        <td>5</td>
+                                        <td>$13.00</td>
+                                        <td><button class="btn btn-primary" onclick="executeTrade('sell')">Buy</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>$2.58</td>
+                                        <td>12</td>
+                                        <td>$30.96</td>
+                                        <td><button class="btn btn-primary" onclick="executeTrade('sell')">Buy</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Chart -->
+                <div class="card">
+                    <h3>Price History - Last 7 Days</h3>
+                    <canvas id="tradingChart"></canvas>
+                </div>
+            </div>
+
+            <!-- MARKETPLACE PAGE -->
+            <div id="marketplace-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-store"></i>
+                        Marketplace
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="listItem()">
+                            <i class="fas fa-plus"></i> List Item
+                        </button>
+                        <button class="btn btn-success" onclick="filterMarketplace()">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search pigs, breeds, or sellers..." id="marketplace-search">
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <select class="form-control" style="width: auto;">
+                            <option>All Breeds</option>
+                            <option>Large White</option>
+                            <option>Duroc</option>
+                            <option>Landrace</option>
+                            <option>Hampshire</option>
+                        </select>
+                        <select class="form-control" style="width: auto;">
+                            <option>All Weights</option>
+                            <option>Under 50kg</option>
+                            <option>50-80kg</option>
+                            <option>80-100kg</option>
+                            <option>Over 100kg</option>
+                        </select>
+                        <select class="form-control" style="width: auto;">
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Newest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Marketplace Items -->
+                <div class="cards-grid" id="marketplace-items">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300x200" alt="Pig" style="width: 100%; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <h4>Large White Boar</h4>
+                        <p><strong>Weight:</strong> 95kg</p>
+                        <p><strong>Age:</strong> 6 months</p>
+                        <p><strong>Price:</strong> $237.50</p>
+                        <p><strong>Seller:</strong> Green Pastures Farm</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-success" style="flex: 1;" onclick="buyItem('P001')">Buy Now</button>
+                            <button class="btn btn-outline" onclick="contactSeller('Green Pastures Farm')">Contact</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300x200" alt="Pig" style="width: 100%; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <h4>Duroc Sow</h4>
+                        <p><strong>Weight:</strong> 82kg</p>
+                        <p><strong>Age:</strong> 5 months</p>
+                        <p><strong>Price:</strong> $205.00</p>
+                        <p><strong>Seller:</strong> Sunrise Ranch</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-success" style="flex: 1;" onclick="buyItem('P002')">Buy Now</button>
+                            <button class="btn btn-outline" onclick="contactSeller('Sunrise Ranch')">Contact</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300x200" alt="Pig" style="width: 100%; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <h4>Landrace Piglet</h4>
+                        <p><strong>Weight:</strong> 25kg</p>
+                        <p><strong>Age:</strong> 2 months</p>
+                        <p><strong>Price:</strong> $62.50</p>
+                        <p><strong>Seller:</strong> Bukure Farms</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-success" style="flex: 1;" onclick="buyItem('P003')">Buy Now</button>
+                            <button class="btn btn-outline" onclick="contactSeller('Bukure Farms')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVENTORY PAGE -->
+            <div id="inventory-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-box"></i>
+                        Pig Inventory Management
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="addPig()">
+                            <i class="fas fa-plus"></i> Add New Pig
+                        </button>
+                        <button class="btn btn-success" onclick="exportInventory()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Inventory Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Available</h4>
+                            <h2>156</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Pending Sale</h4>
+                            <h2>23</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Breeding Stock</h4>
+                            <h2>45</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Health Check</h4>
+                            <h2>12</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Breed</th>
+                                <th>Weight</th>
+                                <th>Age</th>
+                                <th>Health Status</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-list">
+                            <tr>
+                                <td>#P001</td>
+                                <td>Large White</td>
+                                <td>95kg</td>
+                                <td>6 months</td>
+                                <td><span class="badge badge-success">Healthy</span></td>
+                                <td>Pen A-12</td>
+                                <td><span class="badge badge-success">Available</span></td>
+                                <td>
+                                    <button class="btn btn-info" onclick="editPig('P001')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="deletePig('P001')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#P002</td>
+                                <td>Duroc</td>
+                                <td>82kg</td>
+                                <td>5 months</td>
+                                <td><span class="badge badge-warning">Vaccination Due</span></td>
+                                <td>Pen B-03</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-info" onclick="editPig('P002')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="deletePig('P002')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Health Records -->
+                <div class="card">
+                    <h3>Recent Health Records</h3>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--light-color); border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                            <span><strong>Pig #P045</strong> - Vaccination</span>
+                            <span>Jan 15, 2024</span>
+                            <span class="badge badge-success">Completed</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--light-color); border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                            <span><strong>Pig #P067</strong> - Health Check</span>
+                            <span>Jan 14, 2024</span>
+                            <span class="badge badge-success">Healthy</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--light-color); border-radius: var(--border-radius);">
+                            <span><strong>Pig #P089</strong> - Treatment</span>
+                            <span>Jan 13, 2024</span>
+                            <span class="badge badge-warning">Follow-up</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENT PAGE -->
+            <div id="student-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-graduation-cap"></i>
+                        Student Learning Portal
+                    </h2>
+                    <div>
+                        <span class="badge badge-success">Active Courses: 4</span>
+                        <button class="btn btn-primary" onclick="enrollCourse()">
+                            <i class="fas fa-plus"></i> Enroll New Course
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Student Dashboard -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Enrolled Courses</h4>
+                            <h2>4</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Assignments</h4>
+                            <h2>3 Pending</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Certificates</h4>
+                            <h2>2</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>GPA</h4>
+                            <h2>3.8</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Courses -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-book-open"></i> Pig Breeding 101</h3>
+                            <span class="badge badge-success">75%</span>
+                        </div>
+                        <p>Learn the fundamentals of pig breeding, genetics, and reproduction.</p>
+                        <div class="progress" style="margin: 1rem 0;">
+                            <div class="progress-bar" style="width: 75%;"></div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="continueCourse('breeding101')">
+                            Continue Learning
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-utensils"></i> Pig Nutrition</h3>
+                            <span class="badge badge-warning">45%</span>
+                        </div>
+                        <p>Understanding nutritional requirements and feed management.</p>
+                        <div class="progress" style="margin: 1rem 0;">
+                            <div class="progress-bar" style="width: 45%;"></div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="continueCourse('nutrition')">
+                            Continue Learning
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-stethoscope"></i> Disease Management</h3>
+                            <span class="badge badge-success">90%</span>
+                        </div>
+                        <p>Prevention and treatment of common pig diseases.</p>
+                        <div class="progress" style="margin: 1rem 0;">
+                            <div class="progress-bar" style="width: 90%;"></div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="continueCourse('disease')">
+                            Continue Learning
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Assignments -->
+                <div class="table-container">
+                    <h3>Pending Assignments</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Assignment</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pig Breeding 101</td>
+                                <td>Breeding Plan Report</td>
+                                <td>Jan 20, 2024</td>
+                                <td><span class="badge badge-danger">Urgent</span></td>
+                                <td><button class="btn btn-warning" onclick="submitAssignment()">Submit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Pig Nutrition</td>
+                                <td>Feed Formulation</td>
+                                <td>Jan 25, 2024</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-primary" onclick="submitAssignment()">Start</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Learning Resources -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-video"></i> Video Lectures</h3>
+                        <ul style="list-style: none; margin-top: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">• Introduction to Pig Farming (45 min)</li>
+                            <li style="margin-bottom: 0.5rem;">• Breeding Techniques (60 min)</li>
+                            <li style="margin-bottom: 0.5rem;">• Health Management (55 min)</li>
+                        </ul>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">Watch All</button>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-file-pdf"></i> PDF Resources</h3>
+                        <ul style="list-style: none; margin-top: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">• Pig Farming Handbook.pdf</li>
+                            <li style="margin-bottom: 0.5rem;">• Disease Symptoms Guide.pdf</li>
+                            <li style="margin-bottom: 0.5rem;">• Feed Calculator.xlsx</li>
+                        </ul>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">Download All</button>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-question-circle"></i> Practice Quizzes</h3>
+                        <ul style="list-style: none; margin-top: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">• Breeding Basics (10 questions)</li>
+                            <li style="margin-bottom: 0.5rem;">• Nutrition Quiz (15 questions)</li>
+                            <li style="margin-bottom: 0.5rem;">• Health & Disease (20 questions)</li>
+                        </ul>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">Take Quiz</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN PAGE -->
+            <div id="admin-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-cog"></i>
+                        Administrator Dashboard
+                    </h2>
+                    <div>
+                        <span class="badge badge-success">Admin Access</span>
+                        <button class="btn btn-danger" onclick="systemBackup()">
+                            <i class="fas fa-database"></i> Backup System
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Users</h4>
+                            <h2>245</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Pigs</h4>
+                            <h2>567</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-simple"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Transactions</h4>
+                            <h2>1,234</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Revenue</h4>
+                            <h2>$45,678</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="cards-grid">
+                    <!-- User Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user-cog"></i> User Management</h3>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Admins:</span>
+                                <span class="badge badge-info">5</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Traders:</span>
+                                <span class="badge badge-success">156</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Students:</span>
+                                <span class="badge badge-warning">84</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Pending Approvals:</span>
+                                <span class="badge badge-danger">12</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="manageUsers()">
+                            Manage Users
+                        </button>
+                    </div>
+
+                    <!-- System Settings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-sliders-h"></i> System Settings</h3>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Maintenance Mode:</span>
+                                <span class="badge badge-success">Off</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Registration:</span>
+                                <span class="badge badge-success">Open</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Version:</span>
+                                <span>v2.1.0</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="systemSettings()">
+                            Configure System
+                        </button>
+                    </div>
+
+                    <!-- Financial Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-pie"></i> Financial Overview</h3>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Today's Revenue:</span>
+                                <span>$2,450</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>This Month:</span>
+                                <span>$12,890</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Pending Payments:</span>
+                                <span style="color: var(--warning-color);">$3,450</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="financialReports()">
+                            View Reports
+                        </button>
+                    </div>
+                </div>
+
+                <!-- User Table -->
+                <div class="table-container">
+                    <h3>Recent Users</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#U001</td>
+                                <td>John Doe</td>
+                                <td>john@bukure.com</td>
+                                <td>Trader</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>Jan 01, 2024</td>
+                                <td>
+                                    <button class="btn btn-info" onclick="editUser('U001')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="suspendUser('U001')"><i class="fas fa-ban"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U002</td>
+                                <td>Jane Smith</td>
+                                <td>jane@student.com</td>
+                                <td>Student</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>Jan 02, 2024</td>
+                                <td>
+                                    <button class="btn btn-info" onclick="editUser('U002')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="suspendUser('U002')"><i class="fas fa-ban"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- System Logs -->
+                <div class="card">
+                    <h3>System Activity Logs</h3>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <div style="padding: 0.5rem; border-bottom: 1px solid #ddd;">
+                            <span style="color: #666;">10:30:15</span> - User John Doe logged in
+                        </div>
+                        <div style="padding: 0.5rem; border-bottom: 1px solid #ddd;">
+                            <span style="color: #666;">10:25:22</span> - New pig added to inventory
+                        </div>
+                        <div style="padding: 0.5rem; border-bottom: 1px solid #ddd;">
+                            <span style="color: #666;">10:20:07</span> - Trade completed: #T2024001
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORTS PAGE -->
+            <div id="reports-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-chart-bar"></i>
+                        Reports & Analytics
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="generateReport()">
+                            <i class="fas fa-file-pdf"></i> Generate Report
+                        </button>
+                        <button class="btn btn-success" onclick="exportData()">
+                            <i class="fas fa-file-excel"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>Filter Reports</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <label>Report Type</label>
+                            <select class="form-control">
+                                <option>Sales Report</option>
+                                <option>Inventory Report</option>
+                                <option>Financial Report</option>
+                                <option>User Activity</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Date Range</label>
+                            <select class="form-control">
+                                <option>Today</option>
+                                <option>This Week</option>
+                                <option>This Month</option>
+                                <option>Custom Range</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Format</label>
+                            <select class="form-control">
+                                <option>PDF</option>
+                                <option>Excel</option>
+                                <option>CSV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">Apply Filters</button>
+                </div>
+
+                <!-- Report Cards -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Sales Summary</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Total Sales:</span>
+                                <span style="font-weight: bold;">$45,678</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>This Month:</span>
+                                <span style="font-weight: bold;">$12,890</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>This Week:</span>
+                                <span style="font-weight: bold;">$3,450</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Inventory Summary</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Total Pigs:</span>
+                                <span style="font-weight: bold;">567</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Available:</span>
+                                <span style="font-weight: bold;">156</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Sold:</span>
+                                <span style="font-weight: bold;">345</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>User Summary</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Total Users:</span>
+                                <span style="font-weight: bold;">245</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>New This Month:</span>
+                                <span style="font-weight: bold;">34</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Active Today:</span>
+                                <span style="font-weight: bold;">56</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="card">
+                    <h3>Monthly Sales Trend</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- MESSAGES PAGE -->
+            <div id="messages-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-envelope"></i>
+                        Messages
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="composeMessage()">
+                            <i class="fas fa-pen"></i> Compose
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem;">
+                    <!-- Conversation List -->
+                    <div class="card">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search messages...">
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; align-items: center; padding: 1rem; background: var(--light-color); border-radius: var(--border-radius); margin-bottom: 0.5rem; cursor: pointer;">
+                                <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 1rem;"></i>
+                                <div>
+                                    <strong>John Farmer</strong>
+                                    <div style="font-size: 0.8rem; color: #666;">About the pig sale...</div>
+                                    <span style="font-size: 0.7rem; color: #999;">10:30 AM</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 0.5rem; cursor: pointer;">
+                                <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 1rem;"></i>
+                                <div>
+                                    <strong>Mary Smith</strong>
+                                    <div style="font-size: 0.8rem; color: #666;">Breeding consultation</div>
+                                    <span style="font-size: 0.7rem; color: #999;">Yesterday</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message View -->
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-user-circle" style="font-size: 3rem; margin-right: 1rem;"></i>
+                                <div>
+                                    <h3>John Farmer</h3>
+                                    <span style="color: #666;">Online</span>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline"><i class="fas fa-phone"></i></button>
+                                <button class="btn btn-outline"><i class="fas fa-video"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Messages -->
+                        <div style="height: 400px; overflow-y: auto; padding: 1rem;">
+                            <div style="display: flex; margin-bottom: 1rem;">
+                                <div style="background: var(--light-color); padding: 0.5rem 1rem; border-radius: 18px; max-width: 70%;">
+                                    <strong>John Farmer:</strong> Hello, I'm interested in the Large White pig listed.
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                                <div style="background: var(--primary-color); color: white; padding: 0.5rem 1rem; border-radius: 18px; max-width: 70%;">
+                                    Hi John, yes it's still available. Would you like to arrange a visit?
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message Input -->
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <input type="text" class="form-control" placeholder="Type your message...">
+                            <button class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div id="profile-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-user"></i>
+                        My Profile
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="editProfile()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem;">
+                    <!-- Profile Card -->
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-user-circle" style="font-size: 5rem; color: var(--primary-color);"></i>
+                        <h2 style="margin-top: 1rem;">John Doe</h2>
+                        <p style="color: #666;">@johndoe</p>
+                        <span class="badge badge-success">Premium Member</span>
+                        <hr style="margin: 1rem 0;">
+                        <div style="text-align: left;">
+                            <p><i class="fas fa-envelope"></i> john.doe@bukure.com</p>
+                            <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Kigali, Rwanda</p>
+                            <p><i class="fas fa-calendar"></i> Joined Jan 2024</p>
+                        </div>
+                    </div>
+
+                    <!-- Profile Details -->
+                    <div>
+                        <div class="card">
+                            <h3>Account Information</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <label>Full Name</label>
+                                    <p style="font-weight: 500;">John Doe</p>
+                                </div>
+                                <div>
+                                    <label>Email</label>
+                                    <p style="font-weight: 500;">john.doe@bukure.com</p>
+                                </div>
+                                <div>
+                                    <label>Phone</label>
+                                    <p style="font-weight: 500;">+250 788 123 456</p>
+                                </div>
+                                <div>
+                                    <label>Account Type</label>
+                                    <p style="font-weight: 500;">Trader</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top: 2rem;">
+                            <h3>Activity Summary</h3>
+                            <div class="stats-grid" style="margin-top: 1rem;">
+                                <div class="stat-card">
+                                    <div class="stat-info">
+                                        <h4>Total Trades</h4>
+                                        <h2>45</h2>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-info">
+                                        <h4>Success Rate</h4>
+                                        <h2>98%</h2>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-info">
+                                        <h4>Rating</h4>
+                                        <h2>4.8 ★</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div id="settings-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </h2>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-bell"></i> Notifications</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span>Email Notifications</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span>SMS Notifications</span>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Push Notifications</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-lock"></i> Security</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span>Two-Factor Authentication</span>
+                                <button class="btn btn-success">Enable</button>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Change Password</span>
+                                <button class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-palette"></i> Appearance</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span>Dark Mode</span>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div>
+                                <span>Language</span>
+                                <select class="form-control" style="margin-top: 0.5rem;">
+                                    <option>English</option>
+                                    <option>French</option>
+                                    <option>Kinyarwanda</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIFICATIONS PAGE -->
+            <div id="notifications-page" class="page">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </h2>
+                    <div>
+                        <button class="btn btn-outline" onclick="markAllRead()">
+                            Mark All Read
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; padding: 1rem; background: var(--light-color); border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                        <i class="fas fa-check-circle" style="color: var(--success-color); font-size: 1.5rem; margin-right: 1rem;"></i>
+                        <div style="flex: 1;">
+                            <strong>Trade Completed</strong>
+                            <div style="font-size: 0.9rem; color: #666;">Your pig #P045 has been sold successfully</div>
+                            <span style="font-size: 0.8rem; color: #999;">5 minutes ago</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                        <i class="fas fa-graduation-cap" style="color: var(--info-color); font-size: 1.5rem; margin-right: 1rem;"></i>
+                        <div style="flex: 1;">
+                            <strong>Course Progress</strong>
+                            <div style="font-size: 0.9rem; color: #666;">You've completed 75% of Pig Breeding 101</div>
+                            <span style="font-size: 0.8rem; color: #999;">1 hour ago</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; padding: 1rem; border-radius: var(--border-radius);">
+                        <i class="fas fa-tag" style="color: var(--warning-color); font-size: 1.5rem; margin-right: 1rem;"></i>
+                        <div style="flex: 1;">
+                            <strong>Price Alert</strong>
+                            <div style="font-size: 0.9rem; color: #666;">Pig prices have increased by 5% today</div>
+                            <span style="font-size: 0.8rem; color: #999;">2 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer inside main system -->
+            <div class="footer">
+                <p>
+                    <i class="fas fa-copyright"></i> 2024 BUKURE PIGGERY - Complete Pig Trading System
+                </p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    <i class="fas fa-map-marker-alt"></i> Kigali, Rwanda |
+                    <i class="fas fa-phone"></i> +250 788 123 456 |
+                    <i class="fas fa-envelope"></i> info@bukurepiggery.com made by C.Emile
+                </p>
+            </div>
+        </div> <!-- end .container -->
+    </div> <!-- end #main-system -->
+
+    <!-- Chat Widget (global) -->
+    <div class="chat-toggle" onclick="toggleChat()">
+        <i class="fas fa-comment"></i>
+    </div>
+    <div id="chat-widget" class="chat-widget">
+        <div class="chat-header">
+            <span>BUKURE Support</span>
+            <i class="fas fa-times" onclick="toggleChat()"></i>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div style="margin-bottom: 1rem;">
+                <span style="background: var(--light-color); padding: 0.5rem; border-radius: 10px; display: inline-block;">
+                    Hello! How can I help you today?
+                </span>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button class="btn btn-primary" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modals (unchanged) -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Place Order</h3>
+                <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            </div>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Order Type</label>
+                    <select class="form-control">
+                        <option>Buy</option>
+                        <option>Sell</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pig Breed</label>
+                    <select class="form-control">
+                        <option>Large White</option>
+                        <option>Duroc</option>
+                        <option>Landrace</option>
+                        <option>Hampshire</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Price ($)</label>
+                    <input type="number" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" value="1" min="1">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ----------------------------------------------------------------
+        // LOGIN FUNCTIONALITY – USER SEES LOGIN PAGE FIRST
+        // ----------------------------------------------------------------
+        function handleLogin() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            // simple demo authentication – any non-empty values? we'll be friendly
+            if (username && password) {
+                // success – hide login page, show main system
+                document.getElementById('login-page').style.display = 'none';
+                const mainSystem = document.getElementById('main-system');
+                mainSystem.style.display = 'block';
+                mainSystem.classList.add('authenticated');
+                
+                // set logged in user display name
+                const nameFromEmail = username.includes('@') ? username.split('@')[0] : username;
+                document.getElementById('logged-in-user').innerText = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+                
+                // initialize charts and date
+                setTimeout(() => {
+                    try {
+                        initializeDashboardCharts();
+                        initializeTradingChart();
+                        initializeSalesChart();
+                        updateCurrentDate();
+                    } catch(e) { console.log("charts ok", e); }
+                }, 50);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome back!',
+                    text: `Signed in as ${nameFromEmail}`,
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: '#e8f5e9',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Authentication required',
+                    text: 'Please enter your credentials',
+                    confirmButtonColor: '#2e7d32',
+                });
+            }
+        }
+
+        // forgot password hint
+        function forgotPasswordAlert() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Reset Password',
+                text: 'A reset link would be sent to your email. (Demo purpose)',
+                confirmButtonColor: '#2e7d32',
+            });
+        }
+
+        function registerAlert() {
+            Swal.fire({
+                icon: 'question',
+                title: 'Create account',
+                text: 'Registration is currently open! Please contact admin. (Demo)',
+                confirmButtonColor: '#2e7d32',
+            });
+        }
+
+        // ----------------------------------------------------------------
+        // MAIN SYSTEM FUNCTIONS (copied from original, with logout addition)
+        // ----------------------------------------------------------------
+        let currentUser = { name: 'John Doe', email: 'john.doe@bukure.com', role: 'Trader' };
+
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('#main-system .page');
+            pages.forEach(page => page.classList.remove('active-page'));
+            const activePage = document.getElementById(pageName + '-page');
+            if (activePage) activePage.classList.add('active-page');
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            navLinks.forEach(link => {
+                if (link.textContent.toLowerCase().includes(pageName)) link.classList.add('active');
+            });
+            
+            if (pageName === 'dashboard') { initializeDashboardCharts(); }
+            else if (pageName === 'trading') { initializeTradingChart(); }
+            else if (pageName === 'reports') { initializeSalesChart(); }
+            updateCurrentDate();
+        }
+
+        // charts initialization (same as your code)
+        function initializeDashboardCharts() {
+            const ctx1 = document.getElementById('priceChart')?.getContext('2d');
+            if (ctx1 && !ctx1.chart) {
+                ctx1.chart = new Chart(ctx1, {
+                    type: 'line',
+                    data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ label: 'Price per kg ($)', data: [2.45,2.48,2.50,2.47,2.52,2.55,2.50], borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.1)', tension: 0.4 }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            const ctx2 = document.getElementById('breedChart')?.getContext('2d');
+            if (ctx2 && !ctx2.chart) {
+                ctx2.chart = new Chart(ctx2, {
+                    type: 'pie',
+                    data: { labels: ['Large White','Duroc','Landrace','Hampshire'], datasets: [{ data: [45,30,20,5], backgroundColor: ['#2e7d32','#81c784','#ff9800','#2196f3'] }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+        function initializeTradingChart() {
+            const ctx = document.getElementById('tradingChart')?.getContext('2d');
+            if (ctx && !ctx.chart) {
+                ctx.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7'], datasets: [{ label: 'Price', data: [2.40,2.45,2.43,2.50,2.48,2.52,2.50], borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.1)' }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+        function initializeSalesChart() {
+            const ctx = document.getElementById('salesChart')?.getContext('2d');
+            if (ctx && !ctx.chart) {
+                ctx.chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: ['Jan','Feb','Mar','Apr','May','Jun'], datasets: [{ label: 'Sales ($)', data: [12500,15000,18000,16000,21000,24000], backgroundColor: '#2e7d32' }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        function updateCurrentDate() {
+            const el = document.getElementById('current-date');
+            if (el) {
+                const now = new Date();
+                el.textContent = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+            }
+        }
+
+        // trading functions
+        function placeOrder() { document.getElementById('orderModal').classList.add('active'); }
+        function executeTrade(type) {
+            Swal.fire({ title: `Execute ${type} Order?`, text: "This action will complete the trade", icon: 'question', showCancelButton: true, confirmButtonColor: '#2e7d32', confirmButtonText: 'Yes, execute!' }).then((r) => { if (r.isConfirmed) Swal.fire('Success!','Trade executed successfully','success'); });
+        }
+        function listItem() { /* original */ Swal.fire({ title:'List New Item', html:'<input id="breed" class="swal2-input" placeholder="Breed"><input id="weight" class="swal2-input" placeholder="Weight"><input id="price" class="swal2-input" placeholder="Price">', confirmButtonText:'List Item', confirmButtonColor:'#2e7d32', showCancelButton:true }); }
+        function filterMarketplace() { Swal.fire({ title:'Filter Items', html:'<select id="breed-filter" class="swal2-input"><option>All Breeds</option><option>Large White</option><option>Duroc</option><option>Landrace</option></select><select id="price-filter" class="swal2-input"><option>Price: Low to High</option><option>Price: High to Low</option></select>', confirmButtonText:'Apply Filters', confirmButtonColor:'#2e7d32' }); }
+        function buyItem(i) { Swal.fire({ title:'Confirm Purchase', text:'Are you sure?', icon:'question', showCancelButton:true, confirmButtonColor:'#2e7d32', confirmButtonText:'Yes, buy it!' }).then((r)=>{ if(r.isConfirmed) Swal.fire('Success!','Purchase completed','success'); }); }
+        function contactSeller(s) { showPage('messages'); Swal.fire('Contact Seller',`You can now message ${s}`,'info'); }
+        function addPig() { document.getElementById('orderModal').classList.add('active'); }
+        function editPig(i) { Swal.fire({ title:'Edit Pig', html:'<input class="swal2-input" placeholder="Breed" value="Large White"><input class="swal2-input" placeholder="Weight" value="95"><input class="swal2-input" placeholder="Health Status" value="Healthy">', confirmButtonText:'Update', confirmButtonColor:'#2e7d32' }); }
+        function deletePig(i) { Swal.fire({ title:'Are you sure?', text:"Pig removed", icon:'warning', showCancelButton:true, confirmButtonColor:'#f44336', confirmButtonText:'Delete' }).then((r)=> { if(r.isConfirmed) Swal.fire('Deleted!','Pig removed','success'); }); }
+        function exportInventory() { Swal.fire('Export Started','Inventory report is being generated','success'); }
+        function enrollCourse() { Swal.fire({ title:'Available Courses', html:'<select class="swal2-input"><option>Pig Breeding 101</option><option>Pig Nutrition</option><option>Disease Management</option><option>Farm Management</option></select>', confirmButtonText:'Enroll', confirmButtonColor:'#2e7d32' }).then((r)=>{ if(r.isConfirmed) Swal.fire('Enrolled!','Course enrolled','success'); }); }
+        function continueCourse(c) { Swal.fire({ title:'Continue Learning', text:'Loading course content...', icon:'info', timer:1500, showConfirmButton:false }); }
+        function submitAssignment() { Swal.fire({ title:'Submit Assignment', html:'<input type="file" class="swal2-file"><textarea class="swal2-textarea" placeholder="Comments"></textarea>', confirmButtonText:'Submit', confirmButtonColor:'#2e7d32' }).then((r)=>{ if(r.isConfirmed) Swal.fire('Submitted!','Assignment submitted','success'); }); }
+        function manageUsers() { showPage('admin'); Swal.fire('User Management','Opening panel','info'); }
+        function systemSettings() { Swal.fire('System Settings','Configuring...','info'); }
+        function financialReports() { showPage('reports'); }
+        function systemBackup() { Swal.fire({ title:'System Backup', text:'Starting backup...', icon:'info', timer:2000, showConfirmButton:false }).then(()=> Swal.fire('Backup Complete','System backed up','success')); }
+        function editUser(u) { Swal.fire({ title:'Edit User', html:'<input class="swal2-input" placeholder="Name" value="John Doe"><input class="swal2-input" placeholder="Email" value="john@bukure.com"><select class="swal2-input"><option>Trader</option><option>Student</option><option>Admin</option></select>', confirmButtonText:'Update', confirmButtonColor:'#2e7d32' }); }
+        function suspendUser(u) { Swal.fire({ title:'Suspend User?', text:'User will lose access', icon:'warning', showCancelButton:true, confirmButtonColor:'#f44336', confirmButtonText:'Yes, suspend' }); }
+        function generateReport() { Swal.fire({ title:'Generating Report', text:'Please wait...', icon:'info', timer:2000, showConfirmButton:false }).then(()=> Swal.fire('Report Ready','Report generated','success')); }
+        function exportData() { Swal.fire('Export Started','Data being exported','success'); }
+        function composeMessage() { Swal.fire({ title:'Compose Message', html:'<input class="swal2-input" placeholder="To"><input class="swal2-input" placeholder="Subject"><textarea class="swal2-textarea" placeholder="Message"></textarea>', confirmButtonText:'Send', confirmButtonColor:'#2e7d32' }); }
+        function editProfile() { Swal.fire({ title:'Edit Profile', html:'<input class="swal2-input" placeholder="Full Name" value="John Doe"><input class="swal2-input" placeholder="Email" value="john.doe@bukure.com"><input class="swal2-input" placeholder="Phone" value="+250 788 123 456">', confirmButtonText:'Save Changes', confirmButtonColor:'#2e7d32' }); }
+        function markAllRead() { Swal.fire('Success','All notifications marked as read','success'); }
+        function toggleChat() { document.getElementById('chat-widget').classList.toggle('active'); }
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (msg) {
+                const chat = document.getElementById('chat-messages');
+                const d = document.createElement('div'); d.style.marginBottom = '1rem'; d.style.textAlign = 'right';
+                d.innerHTML = `<span style="background: var(--primary-color); color: white; padding: 0.5rem; border-radius: 10px; display: inline-block;">${msg}</span>`;
+                chat.appendChild(d); input.value = '';
+                setTimeout(() => {
+                    const r = document.createElement('div'); r.style.marginBottom = '1rem';
+                    r.innerHTML = `<span style="background: var(--light-color); padding: 0.5rem; border-radius: 10px; display: inline-block;">Thank you. A support agent will respond shortly.</span>`;
+                    chat.appendChild(r); chat.scrollTop = chat.scrollHeight;
+                }, 800);
+            }
+        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // LOGOUT : return to login page
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#2e7d32',
+                confirmButtonText: 'Yes, logout'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // hide main system, show login
+                    document.getElementById('main-system').style.display = 'none';
+                    document.getElementById('main-system').classList.remove('authenticated');
+                    document.getElementById('login-page').style.display = 'flex'; // login visible
+                    // reset login fields
+                    document.getElementById('login-username').value = 'john@bukure.com';
+                    document.getElementById('login-password').value = 'demo123';
+                    Swal.fire('Logged Out', 'You have been successfully logged out', 'success');
+                }
+            });
+        }
+
+        // ON PAGE LOAD: ensure login is visible, main system hidden, date/charts ready later
+        document.addEventListener('DOMContentLoaded', function() {
+            // start with login page
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('main-system').style.display = 'none';
+            document.getElementById('main-system').classList.remove('authenticated');
+            console.log('BUKURE PIGGERY — login first');
+        });
+    </script>
+    <!-- Chart.js (must be loaded after) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
+
+<script>
+// Enable linking directly to a section using ?page=dashboard or #dashboard
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const pageParam = params.get('page');
+        const hash = window.location.hash ? window.location.hash.substring(1) : null;
+        const target = pageParam || hash;
+        if (!target) return;
+
+        function tryShow() {
+            if (typeof showPage === 'function') {
+                showPage(target);
+                return true;
+            }
+            return false;
+        }
+
+        if (!tryShow()) {
+            let attempts = 0;
+            const iv = setInterval(() => {
+                if (tryShow() || ++attempts > 30) clearInterval(iv);
+            }, 100);
+        }
+    } catch (e) {
+        // no-op
+    }
+});
+</script>
